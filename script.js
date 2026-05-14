@@ -492,6 +492,63 @@ function startPractice(mode, sub) {
   showScreen('practice');
 }
 
+// ── サウンド ──────────────────────────────────────────────
+
+let audioCtx = null;
+function getAudioCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+
+function playTypeSound(isCorrect) {
+  try {
+    const ctx = getAudioCtx();
+    const osc  = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    const t = ctx.currentTime;
+    if (isCorrect) {
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(1100 + Math.random() * 200, t);
+      osc.frequency.exponentialRampToValueAtTime(550, t + 0.025);
+      gain.gain.setValueAtTime(0.28, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.04);
+      osc.start(t);
+      osc.stop(t + 0.04);
+    } else {
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(380, t);
+      osc.frequency.exponentialRampToValueAtTime(180, t + 0.06);
+      gain.gain.setValueAtTime(0.22, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.07);
+      osc.start(t);
+      osc.stop(t + 0.07);
+    }
+  } catch (_) {}
+}
+
+function playClearSound() {
+  try {
+    const ctx = getAudioCtx();
+    const freqs = [523, 659, 784, 1047]; // C5 E5 G5 C6
+    freqs.forEach((freq, i) => {
+      const osc  = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      const t = ctx.currentTime + i * 0.09;
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, t);
+      gain.gain.setValueAtTime(0.22, t);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.25);
+      osc.start(t);
+      osc.stop(t + 0.25);
+    });
+  } catch (_) {}
+}
+
 // ── キー入力処理 ──────────────────────────────────────────
 
 function handleKey(key) {
@@ -506,11 +563,13 @@ function handleKey(key) {
   const currentEl = document.querySelector(`.char[data-idx="${state.cursor}"]`);
 
   if (key === expected) {
+    playTypeSound(true);
     currentEl.classList.remove('current');
     currentEl.classList.add('correct');
     state.cursor++;
 
     if (state.cursor >= state.sequence.length) {
+      playClearSound();
       showResult();
       return;
     }
@@ -519,6 +578,7 @@ function handleKey(key) {
     highlightKey(state.sequence[state.cursor]);
     if (isTextMode(state.mode)) updateKana();
   } else {
+    playTypeSound(false);
     state.mistakes++;
     currentEl.classList.add('wrong');
     setTimeout(() => currentEl.classList.remove('wrong'), 260);
