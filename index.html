@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ブラインドタッチ練習</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1>ブラインドタッチ練習</h1>
+    </header>
+
+    <!-- モード選択 -->
+    <div id="screen-menu" class="screen active">
+      <h2 class="screen-title">練習モードを選んでください</h2>
+      <div class="mode-cards">
+        <div class="mode-card" data-mode="home">
+          <span class="corner-ribbon">まずはこれ</span>
+          <div class="mode-icon">🏠</div>
+          <h3>ホームポジション</h3>
+          <p class="mode-keys">A S D F &nbsp; J K L ;</p>
+          <p class="mode-desc">指の基本位置を覚える</p>
+        </div>
+        <div class="mode-card" data-mode="row">
+          <div class="mode-icon">⌨️</div>
+          <h3>行別練習</h3>
+          <p class="mode-keys">上段 / ホーム行 / 下段</p>
+          <p class="mode-desc">段ごとにキーを練習する</p>
+        </div>
+        <div class="mode-card" data-mode="finger">
+          <div class="mode-icon">👆</div>
+          <h3>指別練習</h3>
+          <p class="mode-keys">特定の指を集中練習</p>
+          <p class="mode-desc">苦手な指を強化する</p>
+        </div>
+      </div>
+      <div class="mode-cards-wide">
+        <div class="mode-card mode-card-wide" data-mode="japanese">
+          <div class="mode-icon">🇯🇵</div>
+          <div class="mode-wide-text">
+            <h3>日本語文章</h3>
+            <p class="mode-keys">ひらがなをローマ字で入力</p>
+            <p class="mode-desc">かんたん / ふつう / ランダム</p>
+          </div>
+        </div>
+        <div class="mode-card mode-card-wide" data-mode="challenge">
+          <div class="mode-icon">🏆</div>
+          <div class="mode-wide-text">
+            <h3>チャレンジモード</h3>
+            <p class="mode-keys">固定お題でタイムを競う</p>
+            <p class="mode-desc">上位3件をランキング保存</p>
+          </div>
+        </div>
+      </div>
+      <div class="stats-entry-card" id="btn-show-stats">
+        <span>📊</span>
+        <span>入力統計を見る</span>
+      </div>
+    </div>
+
+    <!-- サブモード選択 (行別 / 指別) -->
+    <div id="screen-sub" class="screen">
+      <button class="back-btn" data-target="menu">← 戻る</button>
+      <h2 id="sub-title" class="screen-title"></h2>
+      <div id="sub-options" class="sub-options"></div>
+    </div>
+
+    <!-- 練習画面 -->
+    <div id="screen-practice" class="screen">
+      <p id="practice-notice" class="practice-notice" style="display:none;"></p>
+      <button class="back-btn" data-target="menu">← 戻る</button>
+      <div class="practice-header">
+        <span id="mode-label" class="mode-label"></span>
+        <div class="stats">
+          <span>正確率: <strong id="stat-accuracy">100%</strong></span>
+          <span>進捗: <strong id="stat-progress">0 / 20</strong></span>
+        </div>
+      </div>
+
+      <div class="text-display" id="text-display">
+        <div id="kana-row" class="kana-row" style="display:none;"></div>
+        <div id="char-row"></div>
+      </div>
+
+      <div class="keyboard-wrap">
+        <div id="keyboard"></div>
+        <div class="finger-legend" id="finger-legend"></div>
+      </div>
+    </div>
+
+    <!-- 統計画面 -->
+    <div id="screen-stats" class="screen">
+      <button class="back-btn" data-target="menu">← 戻る</button>
+      <h2 class="screen-title">入力統計</h2>
+
+      <section class="stats-section">
+        <h3 class="stats-section-title">キー別ミス率</h3>
+        <div class="heatmap-legend">
+          <span>問題なし</span>
+          <div class="heatmap-gradient"></div>
+          <span>よくミス</span>
+        </div>
+        <div class="heatmap-wrap">
+          <div id="heatmap-keyboard"></div>
+        </div>
+        <p class="stats-note">グレーのキーはまだ入力データがありません</p>
+      </section>
+
+      <section class="stats-section">
+        <h3 class="stats-section-title">指別ミス率</h3>
+        <div id="finger-bars" class="finger-bars-container"></div>
+      </section>
+
+      <div class="stats-footer">
+        <button id="btn-reset-stats" class="btn-danger">統計をリセット</button>
+      </div>
+    </div>
+
+    <!-- 結果画面 -->
+    <div id="screen-result" class="screen">
+      <h2 class="screen-title">結果</h2>
+      <div class="result-stats">
+        <div class="result-item">
+          <div class="result-value" id="res-accuracy">—</div>
+          <div class="result-label">正確率</div>
+        </div>
+        <div class="result-item">
+          <div class="result-value" id="res-misses">—</div>
+          <div class="result-label">ミス数</div>
+        </div>
+        <div class="result-item">
+          <div class="result-value" id="res-time">—</div>
+          <div class="result-label">タイム</div>
+        </div>
+      </div>
+      <div id="result-ranking" class="result-ranking" style="display:none;">
+        <h3 class="ranking-title">このお題のランキング</h3>
+        <ol id="ranking-list" class="ranking-list"></ol>
+      </div>
+      <div class="result-actions">
+        <button id="btn-retry" class="btn-primary">スペースキーを押してもう一度</button>
+        <button id="btn-menu"  class="btn-secondary">Escキーを押してメニューへ</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
