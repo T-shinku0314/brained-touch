@@ -237,6 +237,7 @@ const MODES = {
       { id:'top',    label:'上段',    keys:'Q W E R T Y U I O P', chars:['q','w','e','r','t','y','u','i','o','p'] },
       { id:'home',   label:'ホーム行', keys:'A S D F G H J K L ;', chars:['a','s','d','f','g','h','j','k','l',';'] },
       { id:'bottom', label:'下段',    keys:'Z X C V B N M , . /', chars:['z','x','c','v','b','n','m',',','.','/'] },
+      { id:'all',    label:'総合練習', keys:'全行ランダム',          chars:['q','w','e','r','t','y','u','i','o','p','a','s','d','f','g','h','j','k','l',';','z','x','c','v','b','n','m',',','.','/'] },
     ],
   },
   finger: {
