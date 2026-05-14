@@ -229,15 +229,15 @@ const SENTENCES = {
 const MODES = {
   home: {
     label: 'ホームポジション',
-    chars: ['a','s','d','f','j','k','l',';'],
+    chars: ['a','s','d','f','j','k','l'],
   },
   row: {
     label: '行別練習',
     subs: [
       { id:'top',    label:'上段',    keys:'Q W E R T Y U I O P', chars:['q','w','e','r','t','y','u','i','o','p'] },
-      { id:'home',   label:'ホーム行', keys:'A S D F G H J K L ;', chars:['a','s','d','f','g','h','j','k','l',';'] },
-      { id:'bottom', label:'下段',    keys:'Z X C V B N M , . /', chars:['z','x','c','v','b','n','m',',','.','/'] },
-      { id:'all',    label:'総合練習', keys:'全行ランダム',          chars:['q','w','e','r','t','y','u','i','o','p','a','s','d','f','g','h','j','k','l',';','z','x','c','v','b','n','m',',','.','/'] },
+      { id:'home',   label:'ホーム行', keys:'A S D F G H J K L', chars:['a','s','d','f','g','h','j','k','l'] },
+      { id:'bottom', label:'下段',    keys:'Z X C V B N M , .', chars:['z','x','c','v','b','n','m',',','.'] },
+      { id:'all',    label:'総合練習', keys:'全行ランダム',         chars:['q','w','e','r','t','y','u','i','o','p','a','s','d','f','g','h','j','k','l','z','x','c','v','b','n','m',',','.'] },
     ],
   },
   finger: {
@@ -250,7 +250,7 @@ const MODES = {
       { id:'rindex',  label:'右人差し指', keys:'Y H N U J M',   chars:['y','h','n','u','j','m'],   finger:'rindex'  },
       { id:'rmiddle', label:'右中指',     keys:'I K ,',         chars:['i','k',','],               finger:'rmiddle' },
       { id:'rring',   label:'右薬指',     keys:'O L .',         chars:['o','l','.'],               finger:'rring'   },
-      { id:'rpinky',  label:'右小指',     keys:'P ; /',         chars:['p',';','/'],               finger:'rpinky'  },
+      { id:'rpinky',  label:'右小指',     keys:'P',             chars:['p'],                       finger:'rpinky'  },
     ],
   },
   japanese: {
