@@ -126,6 +126,10 @@ function hiraToGroups(text) {
   return groups;
 }
 
+// ── キーガイド設定 ────────────────────────────────────────
+
+let keyGuideEnabled = localStorage.getItem('key_guide') !== 'false';
+
 // ── 統計データ (localStorage) ─────────────────────────────
 
 const KEY_STATS_STORAGE = 'typing_key_stats';
@@ -344,12 +348,10 @@ function buildLegend() {
 
 function highlightKey(char) {
   const allKeys = document.querySelectorAll('.kb-key, .kb-space');
-  allKeys.forEach(k => {
-    k.classList.remove('key-hi', 'key-dim');
-    if (char !== null) k.classList.add('key-dim');
-  });
-  if (char === null) return;
+  allKeys.forEach(k => k.classList.remove('key-hi', 'key-dim'));
+  if (char === null || !keyGuideEnabled) return;
 
+  allKeys.forEach(k => k.classList.add('key-dim'));
   const selector = char === ' '
     ? '.kb-space'
     : `.kb-key[data-key="${CSS.escape(char)}"]`;
@@ -877,6 +879,14 @@ document.getElementById('btn-reset-stats').addEventListener('click', () => {
     keyStatsCache = null;
     showStatsScreen();
   }
+});
+
+// キーガイドトグル
+const toggleKeyGuide = document.getElementById('toggle-key-guide');
+toggleKeyGuide.checked = keyGuideEnabled;
+toggleKeyGuide.addEventListener('change', () => {
+  keyGuideEnabled = toggleKeyGuide.checked;
+  localStorage.setItem('key_guide', keyGuideEnabled ? 'true' : 'false');
 });
 
 // ── 初期化 ────────────────────────────────────────────────
